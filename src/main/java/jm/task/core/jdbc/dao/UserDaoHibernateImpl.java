@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import static java.util.logging.Level.*;
 
 public class UserDaoHibernateImpl implements UserDao {
-    SessionFactory sessionFactory = Util.getSessionFactory();
+    SessionFactory sessionFactory = Util.HibernateUtil.getSessionFactory();
     final static Logger LOGGER = Logger.getLogger(UserDaoHibernateImpl.class.getName());
 
     public UserDaoHibernateImpl() {
@@ -26,11 +26,11 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
 
             session.createNativeQuery(
-                            "CREATE TABLE IF NOT EXISTS users" +
+                            "CREATE TABLE IF NOT EXISTS User" +
                                     " (id INT NOT NULL AUTO_INCREMENT," +
-                                    "name VARCHAR(100) DEFAULT NULL," +
-                                    "lastname VARCHAR(100) DEFAULT NULL," +
-                                    "age INT DEFAULT NULL," +
+                                    "name VARCHAR(100)," +
+                                    "lastname VARCHAR(100)," +
+                                    "age INT," +
                                     "PRIMARY KEY (id))"
                     )
                     .executeUpdate();
@@ -53,7 +53,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session.beginTransaction();
             session.createNativeQuery(
-                            "DROP TABLE IF EXISTS users"
+                            "DROP TABLE IF EXISTS User"
                     )
                     .executeUpdate();
             session.getTransaction().commit();
@@ -85,7 +85,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } finally {
             session.close();
         }
-        return name;
+        return null;
     }
 
     @Override
@@ -113,8 +113,7 @@ public class UserDaoHibernateImpl implements UserDao {
         List<User> allUsers = null;
         try {
             session.beginTransaction();
-            Query query = session.createQuery("FROM User");
-            query.list();
+            allUsers = session.createQuery("FROM User").getResultList();
             session.getTransaction().commit();
         } catch (HibernateException e) {
             if (session.getTransaction() != null) {
@@ -133,9 +132,10 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
-            session.createNativeQuery("TRUNCATE TABLE users;").executeUpdate();
-            System.out.println("Таблица очищена");
+            Query query = session.createQuery("DELETE FROM User");
+            query.executeUpdate();
             session.getTransaction().commit();
+            System.out.println("Таблица очищена");
         } catch (HibernateException e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();

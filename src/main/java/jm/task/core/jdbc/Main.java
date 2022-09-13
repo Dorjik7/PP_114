@@ -7,6 +7,7 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import javax.persistence.EntityManager;
@@ -16,6 +17,27 @@ import java.util.List;
 import static java.util.logging.Level.SEVERE;
 
 public class Main {
+    public static void main(String[] args) {
+
+       User user1 = new User("Adam", "First", (byte) 77);
+        User user2 = new User("John", "Johnson", (byte) 55);
+        Transaction transaction = null;
+        try (Session session = Util.HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(user1);
+            session.save(user2);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+}
+
+
+ /*
     final static Logger LOGGER = Logger.getLogger(UserDaoHibernateImpl.class.getName());
   //  static List<User> allUsers = null;
     public static void main(String[] args) {
