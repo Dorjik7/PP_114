@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -40,7 +41,6 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
                 LOGGER.log(SEVERE, e.toString(), e);
-                e.printStackTrace();
             }
         } finally {
             session.close();
@@ -62,7 +62,6 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
                 LOGGER.log(SEVERE, e.toString(), e);
-                e.printStackTrace();
             }
         } finally {
             session.close();
@@ -78,7 +77,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.getTransaction().commit();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
         } catch (HibernateException e) {
-            e.printStackTrace();
+            LOGGER.log(SEVERE, e.toString(), e);
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
             }
@@ -100,7 +99,6 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
                 LOGGER.log(SEVERE, e.toString(), e);
-                e.printStackTrace();
             }
         } finally {
             session.close();
@@ -119,7 +117,6 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
                 LOGGER.log(SEVERE, e.toString(), e);
-                e.printStackTrace();
             }
         } finally {
             session.close();
@@ -140,7 +137,6 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
                 LOGGER.log(SEVERE, e.toString(), e);
-                e.printStackTrace();
             }
         } finally {
             session.close();
