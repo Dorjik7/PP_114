@@ -1,6 +1,5 @@
 package jm.task.core.jdbc.dao;
 
-import jm.task.core.jdbc.Main;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
@@ -49,7 +48,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public String saveUser(String name, String lastName, byte age) {
         String sqlCommand = "INSERT INTO users(name, lastname, age) VALUES(?,?,?)";
         try (Connection connection = Util.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
@@ -61,6 +60,7 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException | IOException e) {
             LOGGER.log(WARNING, e.toString(), e);
         }
+        return null;
     }
 
     public void removeUserById(long id) {
